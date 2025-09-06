@@ -33,8 +33,10 @@ def شرح():
             temperature=0.3
         )
         explanation = response.choices[0].message.content
-    except Exception as e:
-        explanation = f"حدث خطأ أثناء الشرح: {str(e)}"
+   except Exception as e:
+    import traceback
+    return f"<pre>{traceback.format_exc()}</pre>"
+
 
     return f"""
         <h2>🔍 الشرح:</h2>
@@ -44,3 +46,4 @@ def شرح():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
