@@ -1,1 +1,42 @@
-
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>ترجملي الكود</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f4f4;
+            padding: 40px;
+            direction: rtl;
+            text-align: right;
+        }
+        textarea {
+            width: 100%;
+            height: 300px;
+            font-family: monospace;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        pre {
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧠 ترجملي الكود</h1>
+    <p>ألصق الكود البرمجي هنا واحصل على شرح مبسط سطرًا بسطر 🤓</p>
+    <form action="/شرح" method="post">
+        <textarea name="code" placeholder="ألصق كود Python أو أي لغة أخرى..."></textarea><br>
+        <input type="submit" value="✨ شرح الكود">
+    </form>
+</body>
+</html>
