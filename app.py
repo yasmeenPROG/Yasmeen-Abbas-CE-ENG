@@ -9,8 +9,8 @@ logging.basicConfig(level=logging.INFO)
 app = Flask(__name__)
 
 # إنشئي العميل مع الاستفادة من متغير البيئة السرّي (أفضل للمشروع الإنتاجي)
-openai_api_key = os.getenv("OPENAI_API_KEY")
-logging.info(f"OPENAI_API_KEY موجود؟ {'نعم' if openai_api_key else 'لا'}")
+openai_api_key = os.getenv("YOUR_OPENAI_API_KEY")
+logging.info(f"YOUR_OPENAI_API_KEY موجود؟ {'نعم' if openai_api_key else 'لا'}")
 
 if not openai_api_key:
     logging.error("متغير البيئة OPENAI_API_KEY غير موجود أو فارغ!")
@@ -60,3 +60,4 @@ def شرح():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
