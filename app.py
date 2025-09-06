@@ -1,56 +1,34 @@
 from flask import Flask, request, render_template
-from openai import OpenAI, APIStatusError, APIConnectionError
+import openai
 import os
-import logging
-
-# تفعيل تسجيل الدخول للمساعدة بالتصحيح
-logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
 
-# إنشئي العميل مع الاستفادة من متغير البيئة السرّي (أفضل للمشروع الإنتاجي)
-openai_api_key = os.getenv("OPENAI_API_KEY")
-logging.info(f"OPENAI_API_KEY موجود؟ {'نعم' if openai_api_key else 'لا'}")
-
-if not openai_api_key:
-    logging.error("متغير البيئة OPENAI_API_KEY غير موجود أو فارغ!")
-
-client = OpenAI(api_key=openai_api_key)
+# ✏️ أدخلي مفتاح OpenAI API الخاص فيك
+openai.api_key = "YOUR_OPENAI_API_KEY"  # <-- ضعي المفتاح هنا
 
 @app.route('/')
 def index():
-    return render_template('ONE.html')
+    return render_template('index.html')
 
 @app.route('/شرح', methods=['POST'])
 def شرح():
-    user_code = request.form.get('code', '').strip()
-    
-    if not user_code:
-        return "<h2>رجاءً أدخلي الكود أولاً!</h2><br><a href='/'>رجوع</a>"
-    
-    prompt = (
-        f"أنت مساعد برمجي خبير. يرجى شرح الكود التالي سطرًا بسطر،"
-        f" بلغة عربية مبسطة، مع تبسيط المفاهيم ووظيفة كل جزء:\n\n{user_code}\n\nالشرح:"
-    )
-    
-    logging.info("إرسال الطلب إلى OpenAI...")
+    user_code = request.form['code']
+
+    # ✨ البرومبت المستخدم للشرح
+    prompt = f"""أنت مساعد خبير في البرمجة. يرجى شرح الكود التالي سطرًا بسطر، وبلغة عربية مبسطة، مع تبسيط المفاهيم البرمجية وذكر وظيفة كل جزء من الكود، سواء كان بلغة Python أو أي لغة أخرى. الكود:\n\n{user_code}\n\nالشرح:"""
+
     try:
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": prompt}],
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",  # أو استخدمي gpt-4 لو متاح
+            messages=[
+                {"role": "user", "content": prompt}
+            ],
             temperature=0.3
         )
-        explanation = response.choices[0].message.content
-        logging.info("الشرح تم استلامه بنجاح.")
-    except APIStatusError as e:
-        logging.error(f"APIStatusError: code={e.status_code}, response={e.response}")
-        explanation = f"خطأ من الخادم: {e.status_code}"
-    except APIConnectionError as e:
-        logging.error(f"APIConnectionError: {e}")
-        explanation = "خطأ في الاتصال بالسيرفر، يرجى المحاولة لاحقًا."
+        explanation = response['choices'][0]['message']['content']
     except Exception as e:
-        logging.error(f"خطأ غير متوقع: {e}")
-        explanation = f"حدث خطأ غير معروف: {e}"
+        explanation = f"حدث خطأ أثناء الشرح: {str(e)}"
 
     return f"""
         <h2>🔍 الشرح:</h2>
