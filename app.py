@@ -9,7 +9,7 @@ openai.api_key = "YOUR_OPENAI_API_KEY"  # <-- ضعي المفتاح هنا
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('ONE.html')
 
 @app.route('/شرح', methods=['POST'])
 def شرح():
@@ -38,3 +38,4 @@ def شرح():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
